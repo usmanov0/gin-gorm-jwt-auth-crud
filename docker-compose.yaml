@@ -16,7 +16,7 @@ services:
       - .env
     environment:
       GOCACHE: /go-cache
-    entrypoint: ["./docker/dev/reflex.conf", "./cmd/main.go"]
+    entrypoint: ["./docker/dev/entrypoint.sh", "./cmd/main.go"]
 
 
   migrate:
@@ -32,6 +32,6 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: medium_clone_db
+      POSTGRES_DB: gin_auth_crud
     ports:
       - "5432"
