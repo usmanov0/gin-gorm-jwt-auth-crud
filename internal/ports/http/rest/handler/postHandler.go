@@ -93,7 +93,7 @@ func GetPosts(c *gin.Context) {
 	})
 }
 
-func ShowPosts(c *gin.Context) {
+func ReadPosts(c *gin.Context) {
 	id := c.Param("id")
 
 	var post models.Post
