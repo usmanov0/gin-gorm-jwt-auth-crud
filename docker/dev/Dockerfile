@@ -1,7 +1,3 @@
-FROM golang:1.21
+FROM golang:1.21 as builder
 
-WORKDIR /app
-COPY . .
-
-# Set the entry point
-ENTRYPOINT ["reflex", "-c", "/reflex.conf"]
+RUN go install github.com/cespare/reflex@v0.3.1
