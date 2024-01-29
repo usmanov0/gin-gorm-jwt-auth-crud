@@ -1,20 +1,30 @@
 package initializers
 
 import (
-	"gorm.io/driver/postgres"
+	"database/sql"
+	"fmt"
+	_ "github.com/lib/pq"
 	"gorm.io/gorm"
+	"log"
 	"os"
 )
 
 var DB *gorm.DB
 
 func ConnectDb() {
-	var err error
-	dns := os.Getenv("DNS")
+	connectionString := os.Getenv("DNS")
 
-	DB, err = gorm.Open(postgres.Open(dns), &gorm.Config{})
-
+	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
-		panic("Database connection failed")
+		log.Fatal(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected to the database")
+
+	defer db.Close()
 }
