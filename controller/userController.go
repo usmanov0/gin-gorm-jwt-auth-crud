@@ -9,6 +9,7 @@ import (
 	"os"
 	"simple-crud-api/models"
 	"simple-crud-api/pkg/errors"
+	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
 	"simple-crud-api/pkg/util"
 	"simple-crud-api/storage/initializers"
@@ -130,6 +131,12 @@ func LogOut(c *gin.Context) {
 }
 
 func GetUsers(c *gin.Context) {
+	_, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var users []models.User
 
 	pageStr := c.DefaultQuery("page", "1")
@@ -149,6 +156,12 @@ func GetUsers(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 
 	var user struct {
@@ -174,6 +187,13 @@ func UpdateUser(c *gin.Context) {
 
 	if err := res.Error; err != nil {
 		errors.RecordNotFound(c, err)
+	}
+
+	if userModel.ID != authUser.Id {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Forbidden: You are not allowed to update this profile",
+		})
+		return
 	}
 
 	if userModel.Email != user.Email && util.IsUniqueValue("users", "email", user.Email) {
@@ -203,6 +223,11 @@ func UpdateUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("id")
 
 	var user models.User
@@ -212,6 +237,9 @@ func DeleteUser(c *gin.Context) {
 		errors.RecordNotFound(c, err)
 	}
 
+	if user.ID != authUser.Id {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden: You are not allowed to delete this profile"})
+	}
 	initializers.DB.Delete(&user)
 
 	c.JSON(http.StatusOK, gin.H{
