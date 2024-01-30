@@ -12,6 +12,11 @@ type PaginateRes struct {
 	Total       int64       `json:"total"`
 }
 
+type PaginationInput struct {
+	Page  int `json:"page"`
+	Limit int `json:"limit"`
+}
+
 func Paginate(db *gorm.DB, page, limit int, rawFunc func(*gorm.DB) *gorm.DB, output interface{}) (PaginateRes, error) {
 	offset := (page - 1) * limit
 
