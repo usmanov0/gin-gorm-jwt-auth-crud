@@ -14,6 +14,19 @@ import (
 	"strconv"
 )
 
+// @Summary Create a new category
+// @Description Create a new category
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param name body string true "Category name"
+// @Success 200 {object} gin.H{"category": models.Category} "Successfully created category"
+// @Failure 400 {object} gin.H{"validation": string} "Validation errors"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 409 {object} gin.H{"validations": map[string]interface{}} "Conflict - Category already exists"
+// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Router /api/categories [post]
 func CreateCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
 	if err != nil {
@@ -67,6 +80,18 @@ func CreateCategory(c *gin.Context) {
 	})
 }
 
+// @Summary Get a list of categories
+// @Description Get a list of categories
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param page query int false "Page number"
+// @Param limit query int false "Number of items per page"
+// @Success 200 {object} gin.H{"response": pagination.PaginateRes} "List of categories"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Router /api/categories/ [get]
 func GetCategories(c *gin.Context) {
 	var categories []models.Category
 
@@ -87,6 +112,21 @@ func GetCategories(c *gin.Context) {
 	})
 }
 
+// @Summary Update a category
+// @Description Update a category
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Category ID"
+// @Param name body string true "Category name"
+// @Success 200 {object} models.Category "Updated category"
+// @Failure 400 {object} gin.H{"validation": string} "Validation errors"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 404 {object} gin.H{"error": string} "Category not found"
+// @Failure 409 {object} gin.H{"validations": map[string]interface{}} "Conflict - Category name already exists"
+// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Router /api/categories/{id} [put]
 func UpdateCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
 	if err != nil {
@@ -151,6 +191,18 @@ func UpdateCategory(c *gin.Context) {
 	})
 }
 
+// @Summary Delete a category
+// @Description Delete a category
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Category ID"
+// @Success 200 {object} gin.H{"message": string} "Category deleted successfully"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 404 {object} gin.H{"error": string} "Category not found"
+// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Router /api/categories/{id} [delete]
 func DeleteCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
 	if err != nil {
