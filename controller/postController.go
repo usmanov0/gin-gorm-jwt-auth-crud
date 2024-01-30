@@ -222,11 +222,7 @@ func UpdatePost(c *gin.Context) {
 	}
 	id := c.Param("id")
 
-	var post struct {
-		Title      string `json:"title" binding:"required,min=2,max=200"`
-		Body       string `json:"body" binding:"required"`
-		CategoryId uint   `json:"categoryId" binding:"required,min=1"`
-	}
+	var post *PostRequest
 
 	if err := c.ShouldBindJSON(&post); err != nil {
 		if errs, ok := err.(validator.ValidationErrors); ok {
