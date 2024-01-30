@@ -3,7 +3,7 @@ package util
 import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
-	"simple-crud-api/internal/common/db/initializers"
+	"simple-crud-api/storage/initializers"
 )
 
 func IsUniqueValue(tableName, fieldName, value string) bool {
