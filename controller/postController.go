@@ -15,6 +15,12 @@ import (
 )
 
 func CreatePost(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var post struct {
 		Title      string `json:"title" binding:"required,min=2,max=200"`
 		Body       string `json:"body" binding:"required"`
@@ -43,13 +49,11 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	authId := helper.GetAuthUser(c).Id
-
 	postModel := models.Post{
 		Title:      post.Title,
 		Body:       post.Body,
 		CategoryId: post.CategoryId,
-		UserId:     authId,
+		UserId:     authUser.Id,
 	}
 
 	res := initializers.DB.Create(&postModel)
@@ -118,9 +122,19 @@ func ReadPosts(c *gin.Context) {
 }
 
 func EditPost(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("id")
 
 	var post models.Post
+	if post.UserId != authUser.Id {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Forbidden: You are not allowed to edit this post"})
+		return
+	}
+
 	result := initializers.DB.First(&post, id)
 
 	if err := result.Error; err != nil {
@@ -134,6 +148,11 @@ func EditPost(c *gin.Context) {
 }
 
 func UpdatePost(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("id")
 
 	var post struct {
@@ -164,12 +183,18 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
-	authId := helper.GetAuthUser(c).Id
+	if postModel.UserId != authUser.Id {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Forbidden: You are not allowed to update this post",
+		})
+		return
+	}
+
 	updatePost := models.Post{
 		Title:      post.Title,
 		Body:       post.Body,
 		CategoryId: post.CategoryId,
-		UserId:     authId,
+		UserId:     authUser.Id,
 	}
 
 	result = initializers.DB.Model(&postModel).Updates(&updatePost)
@@ -184,12 +209,24 @@ func UpdatePost(c *gin.Context) {
 }
 
 func DeletePost(c *gin.Context) {
+	authUser, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("id")
 	var post models.Post
 
 	result := initializers.DB.First(&post, id)
 	if err := result.Error; err != nil {
 		errors.RecordNotFound(c, err)
+		return
+	}
+
+	if post.UserId != authUser.Id {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Forbidden: You are not allowed to delete this post",
+		})
 		return
 	}
 
