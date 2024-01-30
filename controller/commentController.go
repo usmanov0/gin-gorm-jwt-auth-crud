@@ -4,12 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
-	"simple-crud-api/models"
 	"simple-crud-api/pkg/errors"
 	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/util"
 	"simple-crud-api/storage/initializers"
 )
+
+type Comment struct {
+	ID     uint   `json:"id"`
+	Body   string `gorm:"column:body;type:text" json:"body"`
+	PostId uint   `gorm:"foreignKey:PostId;type:integer;not null" json:"post_id" binding:"required, gt=0"`
+	UserId uint   `gorm:"foreignKey:UserId;type:integer" json:"user_id"`
+	User   User   `gorm:"foreignKey:UserId" json:"user"`
+}
 
 // @Summary Comment on a post
 // @Description Comment on a post
@@ -61,7 +68,7 @@ func CommentOnPost(c *gin.Context) {
 
 	authUser, _ := helper.GetAuthUser(c)
 
-	commentModel := models.Comment{
+	commentModel := Comment{
 		PostId: comment.PostId,
 		Body:   comment.Body,
 		UserId: authUser.Id,
@@ -121,7 +128,7 @@ func UpdateComment(c *gin.Context) {
 		return
 	}
 
-	var commentModel models.Comment
+	var commentModel Comment
 	result := initializers.DB.First(&commentModel, id)
 
 	if err := result.Error; err != nil {
@@ -157,7 +164,7 @@ func UpdateComment(c *gin.Context) {
 func DeleteComment(c *gin.Context) {
 	id := c.Param("comment_id")
 
-	var comment models.Comment
+	var comment Comment
 	result := initializers.DB.First(&comment, id)
 
 	if err := result.Error; err != nil {

@@ -7,7 +7,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
-	"simple-crud-api/models"
 	"simple-crud-api/pkg/errors"
 	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
@@ -15,6 +14,13 @@ import (
 	"simple-crud-api/storage/initializers"
 	"time"
 )
+
+type User struct {
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"-"`
+}
 
 // @Summary Sign up a new user
 // @Description Create a new user account
@@ -64,7 +70,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	userModel := models.User{
+	userModel := User{
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: string(hashPassword),
@@ -105,7 +111,7 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	var userModel models.User
+	var userModel User
 	initializers.DB.First(&userModel, "email = ?", user.Email)
 
 	if userModel.ID == 0 {
@@ -180,7 +186,7 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	var users []models.User
+	var users []User
 
 	res, err := pagination.Paginate(initializers.DB, input.Page, input.Limit, nil, &users)
 	if err != nil {
@@ -232,7 +238,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	var userModel models.User
+	var userModel User
 	res := initializers.DB.First(&userModel, id)
 
 	if err := res.Error; err != nil {
@@ -255,7 +261,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	updateUser := models.User{
+	updateUser := User{
 		Name:  user.Name,
 		Email: user.Email,
 	}
@@ -292,7 +298,7 @@ func DeleteUser(c *gin.Context) {
 	}
 	id := c.Param("id")
 
-	var user models.User
+	var user User
 
 	result := initializers.DB.First(&user, id)
 	if err := result.Error; err != nil {

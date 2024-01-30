@@ -5,7 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 	"net/http"
-	"simple-crud-api/models"
+	"os/user"
 	"simple-crud-api/pkg/errors"
 	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
@@ -13,6 +13,17 @@ import (
 	"simple-crud-api/storage/initializers"
 	"strconv"
 )
+
+type Post struct {
+	ID         uint      `json:"id"`
+	Title      string    `json:"title"`
+	Body       string    `json:"body"`
+	UserId     uint      `json:"user_id"`
+	CategoryId uint      `json:"category_id"`
+	Category   Category  `json:"category"`
+	User       user.User `json:"user"`
+	Comments   []Comment `json:"comments"`
+}
 
 // @Summary Create a new post
 // @Description Create a new post
@@ -65,7 +76,7 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	postModel := models.Post{
+	postModel := Post{
 		Title:      post.Title,
 		Body:       post.Body,
 		CategoryId: post.CategoryId,
@@ -97,7 +108,7 @@ func CreatePost(c *gin.Context) {
 // @Failure 500 {object} "Internal Server Error"
 // @Router /api/posts [get]
 func GetPosts(c *gin.Context) {
-	var posts []models.Post
+	var posts []Post
 
 	pageStr := c.DefaultQuery("page", "1")
 	page, _ := strconv.Atoi(pageStr)
@@ -139,7 +150,7 @@ func GetPosts(c *gin.Context) {
 func ReadPosts(c *gin.Context) {
 	id := c.Param("id")
 
-	var post models.Post
+	var post Post
 	result := initializers.DB.Preload("Category", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, name, slug")
 	}).Preload("User", func(db *gorm.DB) *gorm.DB {
@@ -179,7 +190,7 @@ func EditPost(c *gin.Context) {
 	}
 	id := c.Param("id")
 
-	var post models.Post
+	var post Post
 	if post.UserId != authUser.Id {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Forbidden: You are not allowed to edit this post"})
 		return
@@ -244,7 +255,7 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
-	var postModel models.Post
+	var postModel Post
 	result := initializers.DB.First(&postModel, id)
 	if err := result.Error; err != nil {
 		errors.RecordNotFound(c, err)
@@ -258,7 +269,7 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
-	updatePost := models.Post{
+	updatePost := Post{
 		Title:      post.Title,
 		Body:       post.Body,
 		CategoryId: post.CategoryId,
@@ -295,7 +306,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 	id := c.Param("id")
-	var post models.Post
+	var post Post
 
 	result := initializers.DB.First(&post, id)
 	if err := result.Error; err != nil {

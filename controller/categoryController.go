@@ -14,6 +14,13 @@ import (
 	"strconv"
 )
 
+type Category struct {
+	ID    uint   `json:"id"`
+	Name  string `gorm:"column:name;type:varchar(255);unique;not null" json:"name"`
+	Slug  string `gorm:"column:slug;type:varchar(255);unique;not null" json:"slug"`
+	Posts []Post `gorm:"foreignKey:CategoryId" json:"posts"`
+}
+
 // @Summary Create a new category
 // @Description Create a new category
 // @Accept json
@@ -61,7 +68,7 @@ func CreateCategory(c *gin.Context) {
 		return
 	}
 
-	categoryModel := models.Category{
+	categoryModel := Category{
 		Name: category.Name,
 		Slug: slug.Make(category.Name),
 	}
@@ -153,7 +160,7 @@ func UpdateCategory(c *gin.Context) {
 		return
 	}
 
-	var categoryModel models.Category
+	var categoryModel Category
 
 	result := initializers.DB.First(&categoryModel, id)
 
@@ -175,7 +182,7 @@ func UpdateCategory(c *gin.Context) {
 		return
 	}
 
-	updateCategory := models.Category{
+	updateCategory := Category{
 		Name: category.Name,
 		Slug: slug.Make(category.Name),
 	}
@@ -211,7 +218,7 @@ func DeleteCategory(c *gin.Context) {
 	}
 
 	id := c.Param("id")
-	var category models.Category
+	var category Category
 
 	result := initializers.DB.First(&category, id)
 	if err := result.Error; err != nil {
