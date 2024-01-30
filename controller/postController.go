@@ -24,7 +24,7 @@ type Post struct {
 	Comments   []Comment `json:"comments"`
 }
 
-var PostReq struct {
+type PostRequest struct {
 	Title      string `json:"title"`
 	Body       string `json:"body"`
 	CategoryId uint   `json:"categoryId"`
@@ -36,7 +36,7 @@ var PostReq struct {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
-// @Param post body PostReq true "Post details"
+// @Param post body PostRequest true "Post details"
 // @Success 200
 // @Failure 401
 // @Router /api/posts [post]
@@ -46,12 +46,7 @@ func CreatePost(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
-
-	var post struct {
-		Title      string `json:"title" binding:"required,min=2,max=200"`
-		Body       string `json:"body" binding:"required"`
-		CategoryId uint   `json:"categoryId" binding:"required,min=1"`
-	}
+	var post *PostRequest
 
 	if err := c.ShouldBindJSON(&post); err != nil {
 		if errs, ok := err.(validator.ValidationErrors); ok {
@@ -214,7 +209,7 @@ func EditPost(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Param post body PostReq true "Update post details"
+// @Param post body PostRequest true "Update post details"
 // @Success 200 {object} Post
 // @Failure 401
 // @Failure 403
