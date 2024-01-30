@@ -31,9 +31,9 @@ type Comment struct {
 //	} true "Comment details"
 //
 // @Success 200 {object} Comment
-// @Failure 401 {object}
-// @Failure 422 {object}
-// @Failure 500 {object}
+// @Failure 401
+// @Failure 422
+// @Failure 500
 // @Router /api/comments/comment [post]
 func CommentOnPost(c *gin.Context) {
 	var comment struct {
