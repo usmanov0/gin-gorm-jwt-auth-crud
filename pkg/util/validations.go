@@ -2,7 +2,9 @@ package util
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"net/http"
 	"simple-crud-api/storage/initializers"
 )
 
@@ -30,6 +32,18 @@ func IsExistValue(tableName, fieldName string, value interface{}) bool {
 	}
 
 	return count > 0
+}
+
+func HandleValidationErrors(c *gin.Context, err error) {
+	if errs, ok := err.(validator.ValidationErrors); ok {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"validation": FormatValidationErrors(errs),
+		})
+		return
+	}
+	c.JSON(http.StatusBadRequest, gin.H{
+		"error": err.Error(),
+	})
 }
 
 func FormatValidationErrors(errs validator.ValidationErrors) map[string]string {
