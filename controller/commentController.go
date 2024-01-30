@@ -23,6 +23,10 @@ type CommentReq struct {
 	Body   string `json:"body" binding:"required,min=1"`
 }
 
+type CommentUpdate struct {
+	Body string `json:"body" binding:"required,min=1"`
+}
+
 // @Summary Comment on a post
 // @Description Comment on a post
 // @Accept json
@@ -88,11 +92,7 @@ func CommentOnPost(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Comment ID"
-//
-//	@Param comment body struct {
-//	  Body string `json:"body" binding:"required,min=1"`
-//	} true "Updated comment details"
-//
+// @Param comment body CommentUpdate true "Update commit"
 // @Success 200
 // @Failure 401
 // @Failure 403
