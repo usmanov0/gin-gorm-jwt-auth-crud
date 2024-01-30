@@ -207,9 +207,9 @@ func GetUsers(c *gin.Context) {
 // @Param user body models.UpdateRequest true "Updated user details"
 // @Security Bearer
 // @Success 200 {object} models.UpdateResponse"
-// @Failure 401 {object}
-// @Failure 403 {object}
-// @Failure 500 {object}
+// @Failure 401
+// @Failure 403
+// @Failure 500
 // @Router /api/users/update/{id} [put]
 func UpdateUser(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
