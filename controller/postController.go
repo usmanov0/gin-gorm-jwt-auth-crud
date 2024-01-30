@@ -27,9 +27,8 @@ import (
 //	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
 //	} true "Post details"
 //
-// @Success 200 {object} gin.H{"message": string} "Newly created post"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 422 {object} gin.H{"validation": map[string]interface{}} "Validation error"
+// @Success 200 {object} "Newly created post"
+// @Failure 401 {object} "Unauthorized"
 // @Router /api/posts [post]
 func CreatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -93,9 +92,9 @@ func CreatePost(c *gin.Context) {
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param page query int false "Page number"
 // @Param perPage query int false "Number of items per page"
-// @Success 200 {object} gin.H{"response": pagination.PaginateRes} "List of posts"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Success 200 {object} pagination.PaginateRes
+// @Failure 401 {object} "Unauthorized"
+// @Failure 500 {object} "Internal Server Error"
 // @Router /api/posts [get]
 func GetPosts(c *gin.Context) {
 	var posts []models.Post
@@ -133,9 +132,9 @@ func GetPosts(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} gin.H{"post": models.Post} "Post details"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Success 200 {object} models.Post
+// @Failure 401 {object} "Unauthorized"
+// @Failure 404 {object} "Post not found"
 // @Router /api/posts/read-post [get]
 func ReadPosts(c *gin.Context) {
 	id := c.Param("id")
@@ -168,9 +167,9 @@ func ReadPosts(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} gin.H{"post": "Post details"}
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Success 200 {object} "Post details"
+// @Failure 401 {object} "Unauthorized"
+// @Failure 404 {object} "Post not found"
 // @Router /api/posts/edit/{id} [get]
 func EditPost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -212,10 +211,9 @@ func EditPost(c *gin.Context) {
 //	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
 //	} true "Updated post details"
 //
-// @Success 200 {object} gin.H{"post": models.Post} "Updated post details"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 403 {object} gin.H{"error": string} "Forbidden"
-// @Failure 422 {object} gin.H{"validations": map[string]interface{}} "Validation error"
+// @Success 200 {object} models.Post
+// @Failure 401 {object} "Unauthorized"
+// @Failure 403 {object} "Forbidden"
 // @Router /api/posts/update/{id} [put]
 func UpdatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -285,10 +283,10 @@ func UpdatePost(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} gin.H{"message": string} "Post deleted successfully"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 403 {object} gin.H{"error": string} "Forbidden"
-// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Success 200 {object} "Post deleted successfully"
+// @Failure 401 {object} "Unauthorized"
+// @Failure 403 {object} "Forbidden"
+// @Failure 404 {object} "Post not found"
 // @Router /api/posts/delete/{id} [delete]
 func DeletePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)

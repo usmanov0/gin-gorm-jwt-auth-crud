@@ -22,9 +22,9 @@ import (
 // @Accept json
 // @Produce json
 // @Param user body models.User true "User details for sign up"
-// @Success 200 {object} gin.H {"message":"Successfully signed up"}
-// @Failure 400 {object} gin.H {"validation":{}} "Bad request"
-// @Failure 500 {object} gin.H {"error": "Internal Server Error"}
+// @Success 200
+// @Failure 400
+// @Failure default
 // @Router /api/sign-up [post]
 func SignUp(c *gin.Context) {
 	var user struct {
@@ -88,9 +88,9 @@ func SignUp(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param user body models.SignInRequest true "User credentials for sign in"
-// @Success 200 {object} gin.H {"message":"Successfully logged in"}
-// @Failure 400 {object} gin.H {"error": "Invalid email or password"}
-// @Failure 500 {object} gin.H {"error": "Internal Server Error"}
+// @Success 200
+// @Failure 400
+// @Failure default
 // @Router /api/log-in [post]
 func SignIn(c *gin.Context) {
 	var user struct {
@@ -163,9 +163,9 @@ func LogOut(c *gin.Context) {
 // @Param page query int false "Page number for pagination"
 // @Param perPage query int false "Number of users per page"
 // @Security Bearer
-// @Success 200 {object} gin.H {"result":"models.GetUserResponse"}
-// @Failure 401 {object} gin.H {"error": "Unauthorized"}
-// @Failure 500 {object} gin.H {"error": "Internal Server Error"}
+// @Success 200 {object} models.GetUserResponse
+// @Failure 401
+// @Failure default
 // @Router /api/users [get]
 func GetUsers(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
@@ -200,11 +200,10 @@ func GetUsers(c *gin.Context) {
 // @Param id path int true "User ID"
 // @Param user body models.UpdateRequest true "Updated user details"
 // @Security Bearer
-// @Success 200 {object} gin.H {"result":"models.UpdateResponse"}
-// @Failure 401 {object} gin.H {"error": "Unauthorized"}
-// @Failure 403 {object} gin.H {"error": "Forbidden: You are not allowed to update this profile"}
-// @Failure 422 {object} gin.H {"validation":{}}
-// @Failure 500 {object} gin.H {"error": "Internal Server Error"}
+// @Success 200 {object} models.UpdateResponse"
+// @Failure 401 {object} "Unauthorized"
+// @Failure 403 {object} "Forbidden: You are not allowed to update this profile"
+// @Failure 500 {object} "Internal Server Error"
 // @Router /api/users/update/{id} [put]
 func UpdateUser(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -279,10 +278,10 @@ func UpdateUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {object} gin.H{"message": "User successfully deleted"}
+// @Success 200 {object} "User successfully deleted"
 // @Failure 400 {object} ErrorResponse
-// @Failure 401 {object} ErrorResponse
-// @Failure 403 {object} ErrorResponse
+// @Failure 401 {object} "Unauthorized"
+// @Failure 403 {object} "Forbidden: You are not allowed to delete this profile"
 // @Failure 404 {object} ErrorResponse
 // @Router /api/users/delete/{id} [delete]
 func DeleteUser(c *gin.Context) {

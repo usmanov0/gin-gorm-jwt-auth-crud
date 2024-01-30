@@ -91,12 +91,12 @@ func CommentOnPost(c *gin.Context) {
 //	  Body string `json:"body" binding:"required,min=1"`
 //	} true "Updated comment details"
 //
-// @Success 200 {object} gin.H{"comment": struct{Body string} } "Updated comment details"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 403 {object} gin.H{"error": string} "Forbidden"
-// @Failure 404 {object} gin.H{"error": string} "Comment not found"
-// @Failure 422 {object} gin.H{"validations": map[string]interface{}} "Validation error"
-// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Success 200 {object} "Updated comment details"
+// @Failure 401 {object} "Unauthorized"
+// @Failure 403 {object} "Forbidden"
+// @Failure 404 {object} "Comment not found"
+// @Failure 422 {object} "Validation error"
+// @Failure 500 {object} "Internal Server Error"
 // @Router /api/comments/update{id} [put]
 func UpdateComment(c *gin.Context) {
 	id := c.Param("id")
@@ -149,10 +149,10 @@ func UpdateComment(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param comment_id path int true "Comment ID"
-// @Success 200 {object} gin.H{"message": string} "Comment deleted successfully"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 404 {object} gin.H{"error": string} "Comment not found"
-// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Success 200 {object} "Comment deleted successfully"
+// @Failure 401 {object} "Unauthorized"
+// @Failure 404 {object} "Comment not found"
+// @Failure 500 {object} "Internal Server Error"
 // @Router /api/comments/{id} [delete]
 func DeleteComment(c *gin.Context) {
 	id := c.Param("comment_id")
