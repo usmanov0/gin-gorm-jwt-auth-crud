@@ -18,31 +18,26 @@ type Comment struct {
 	User   User   `json:"user"`
 }
 
+type CommentReq struct {
+	PostId uint   `json:"postId" binding:"required,min=1"`
+	Body   string `json:"body" binding:"required,min=1"`
+}
+
 // @Summary Comment on a post
 // @Description Comment on a post
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
-//
-//	@Param comment body struct {
-//	  PostId uint   `json:"postId" binding:"required,min=1"`
-//	  Body   string `json:"body" binding:"required,min=1"`
-//	} true "Comment details"
-//
+// @Param comment body CommentReq true "Comment details"
 // @Success 200 {object} Comment
 // @Failure 401
 // @Failure 422
 // @Failure 500
 // @Router /api/comments/comment [post]
 func CommentOnPost(c *gin.Context) {
-	var comment struct {
-		PostId uint   `json:"postId" binding:"required,min=1"`
-		Body   string `json:"body" binding:"required,min=1"`
-	}
-
-	err := c.ShouldBindJSON(&comment)
-
+	var commentReq *CommentReq
+	err := c.ShouldBindJSON(&commentReq)
 	if err != nil {
 		if errors, ok := err.(validator.ValidationErrors); ok {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -57,7 +52,7 @@ func CommentOnPost(c *gin.Context) {
 		return
 	}
 
-	if !util.IsExistValue("posts", "id", comment.PostId) {
+	if !util.IsExistValue("posts", "id", commentReq.PostId) {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"validations": map[string]interface{}{
 				"PostId": "The post does not exist",
@@ -69,8 +64,8 @@ func CommentOnPost(c *gin.Context) {
 	authUser, _ := helper.GetAuthUser(c)
 
 	commentModel := Comment{
-		PostId: comment.PostId,
-		Body:   comment.Body,
+		PostId: commentReq.PostId,
+		Body:   commentReq.Body,
 		UserId: authUser.Id,
 	}
 
