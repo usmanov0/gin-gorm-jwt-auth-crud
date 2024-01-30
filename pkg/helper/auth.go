@@ -3,7 +3,7 @@ package helper
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"simple-crud-api/internal/middleware"
+	"simple-crud-api/middleware"
 )
 
 func GetAuthUser(c *gin.Context) *middleware.AuthUser {
