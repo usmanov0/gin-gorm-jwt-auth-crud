@@ -16,9 +16,9 @@ import (
 
 type Category struct {
 	ID    uint   `json:"id"`
-	Name  string `gorm:"column:name;type:varchar(255);unique;not null" json:"name"`
-	Slug  string `gorm:"column:slug;type:varchar(255);unique;not null" json:"slug"`
-	Posts []Post `gorm:"foreignKey:CategoryId" json:"posts"`
+	Name  string `json:"name"`
+	Slug  string `json:"slug"`
+	Posts []Post `json:"posts"`
 }
 
 // @Summary Create a new category

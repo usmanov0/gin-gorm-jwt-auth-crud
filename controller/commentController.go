@@ -12,10 +12,10 @@ import (
 
 type Comment struct {
 	ID     uint   `json:"id"`
-	Body   string `gorm:"column:body;type:text" json:"body"`
-	PostId uint   `gorm:"foreignKey:PostId;type:integer;not null" json:"post_id" binding:"required, gt=0"`
-	UserId uint   `gorm:"foreignKey:UserId;type:integer" json:"user_id"`
-	User   User   `gorm:"foreignKey:UserId" json:"user"`
+	Body   string `json:"body"`
+	PostId uint   `json:"post_id" binding:"required, gt=0"`
+	UserId uint   `json:"user_id"`
+	User   User   `json:"user"`
 }
 
 // @Summary Comment on a post
