@@ -6,8 +6,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"os"
-	"simple-crud-api/internal/common/db/initializers"
-	"simple-crud-api/internal/models"
+	"simple-crud-api/models"
+	"simple-crud-api/storage/initializers"
 	"time"
 )
 
@@ -32,7 +32,8 @@ func RequireAuth(c *gin.Context) {
 	})
 
 	if err != nil || !token.Valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Unauthorized"})
 		c.Abort()
 		return
 	}
