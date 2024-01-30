@@ -8,8 +8,7 @@ import (
 	"simple-crud-api/middleware"
 )
 
-func Route() *gin.Engine {
-	r := gin.Default()
+func Route(r *gin.Engine) {
 	r.POST("/api/sign-up", controller.SignUp)
 	r.POST("/api/log-in", controller.SignIn)
 
@@ -46,5 +45,4 @@ func Route() *gin.Engine {
 		commentRouter.PUT("/update", controller.UpdateComment)
 		commentRouter.DELETE("/delete", controller.DeleteComment)
 	}
-	return r
 }

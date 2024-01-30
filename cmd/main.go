@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"simple-crud-api/api"
 	"simple-crud-api/config"
 	"simple-crud-api/storage/initializers"
@@ -12,6 +13,7 @@ func init() {
 }
 
 func main() {
-	r := api.Route()
+	r := gin.Default()
+	api.Route(r)
 	r.Run()
 }
