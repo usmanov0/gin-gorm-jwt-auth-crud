@@ -28,9 +28,9 @@ type Category struct {
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param name body string true "Category name"
 // @Success 200 {object} Category
-// @Failure 400 {object}
-// @Failure 401 {object}
-// @Failure 500 {object}
+// @Failure 400
+// @Failure 401
+// @Failure 500
 // @Router /api/categories [post]
 func CreateCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
