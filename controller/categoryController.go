@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"simple-crud-api/models"
 	"simple-crud-api/pkg/errors"
+	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
 	"simple-crud-api/pkg/util"
 	"simple-crud-api/storage/initializers"
@@ -14,6 +15,12 @@ import (
 )
 
 func CreateCategory(c *gin.Context) {
+	_, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var category struct {
 		Name string `json:"name" binding:"required,min=2"`
 	}
@@ -43,6 +50,7 @@ func CreateCategory(c *gin.Context) {
 
 	categoryModel := models.Category{
 		Name: category.Name,
+		Slug: slug.Make(category.Name),
 	}
 
 	result := initializers.DB.Create(&categoryModel)
@@ -80,6 +88,12 @@ func GetCategories(c *gin.Context) {
 }
 
 func UpdateCategory(c *gin.Context) {
+	_, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 
 	var category struct {
@@ -138,6 +152,12 @@ func UpdateCategory(c *gin.Context) {
 }
 
 func DeleteCategory(c *gin.Context) {
+	_, err := helper.GetAuthUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	var category models.Category
 
