@@ -2,11 +2,14 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	//swaggerfile "github.com/swaggo/files"
+	//ginSwagger "github.com/swaggo/gin-swagger"
 	"simple-crud-api/controller"
 	"simple-crud-api/middleware"
 )
 
-func Route(r *gin.Engine) {
+func Route() *gin.Engine {
+	r := gin.Default()
 	r.POST("/api/sign-up", controller.SignUp)
 	r.POST("/api/log-in", controller.SignIn)
 
@@ -43,5 +46,5 @@ func Route(r *gin.Engine) {
 		commentRouter.PUT("/update", controller.UpdateComment)
 		commentRouter.DELETE("/delete", controller.DeleteComment)
 	}
-
+	return r
 }
