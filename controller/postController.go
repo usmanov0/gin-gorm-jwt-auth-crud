@@ -24,19 +24,19 @@ type Post struct {
 	Comments   []Comment `json:"comments"`
 }
 
+var PostReq struct {
+	Title      string `json:"title" binding:"required,min=2,max=200"`
+	Body       string `json:"body" binding:"required"`
+	CategoryId uint   `json:"categoryId" binding:"required,min=1"`
+}
+
 // @Summary Create a new post
 // @Description Create a new post
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
-//
-//	@Param post body struct {
-//	  Title      string `json:"title" binding:"required,min=2,max=200"`
-//	  Body       string `json:"body" binding:"required"`
-//	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
-//	} true "Post details"
-//
+// @Param post body PostReq true "Post details"
 // @Success 200
 // @Failure 401
 // @Router /api/posts [post]
@@ -214,13 +214,7 @@ func EditPost(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-//
-//	@Param post body struct {
-//	  Title      string `json:"title" binding:"required,min=2,max=200"`
-//	  Body       string `json:"body" binding:"required"`
-//	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
-//	} true "Updated post details"
-//
+// @Param post body PostReq true "Update post details"
 // @Success 200 {object} Post
 // @Failure 401
 // @Failure 403

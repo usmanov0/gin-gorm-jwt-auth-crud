@@ -22,6 +22,19 @@ type User struct {
 	Password string `json:"-"`
 }
 
+type GetUserResponse struct {
+	Users []User `json:"users"`
+}
+
+type UpdateRequest struct {
+	Name  string `json:"name" binding:"required,min=2,max=50"`
+	Email string `json:"email" binding:"required,email"`
+}
+
+type UpdateResponse struct {
+	User User `json:"user"`
+}
+
 // @Summary Sign up a new user
 // @Description Create a new user account
 // @Tags Auth
@@ -93,7 +106,7 @@ func SignUp(c *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param user body models.SignInRequest true "User credentials for sign in"
+// @Param user body SignInRequest true "User credentials for sign in"
 // @Success 200
 // @Failure 400
 // @Failure default
@@ -169,7 +182,7 @@ func LogOut(c *gin.Context) {
 // @Param page query int false "Page number for pagination"
 // @Param perPage query int false "Number of users per page"
 // @Security Bearer
-// @Success 200 {object} models.GetUserResponse
+// @Success 200 {object} GetUserResponse
 // @Failure 401
 // @Failure default
 // @Router /api/users [get]
@@ -204,9 +217,9 @@ func GetUsers(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "User ID"
-// @Param user body models.UpdateRequest true "Updated user details"
+// @Param user body UpdateRequest true "Updated user details"
 // @Security Bearer
-// @Success 200 {object} models.UpdateResponse"
+// @Success 200 {object} UpdateResponse"
 // @Failure 401
 // @Failure 403
 // @Failure 500
