@@ -2,7 +2,6 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"os/user"
 )
 
 type Post struct {
@@ -12,6 +11,6 @@ type Post struct {
 	UserId     uint      `gorm:"column:user_id;type:integer;not null" json:"user_id"`
 	CategoryId uint      `gorm:"column:category_id;type:integer;not null" json:"category_id"`
 	Category   Category  `gorm:"foreignKey:CategoryId" json:"category"`
-	User       user.User `gorm:"foreignKey:UserId" json:"user"`
+	User       User      `gorm:"foreignKey:UserId" json:"user"`
 	Comments   []Comment `gorm:"foreignKey:PostId" json:"comments"`
 }

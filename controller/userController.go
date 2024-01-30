@@ -151,7 +151,7 @@ func SignIn(c *gin.Context) {
 // @Description Log out the currently authenticated user
 // @Tags Auth
 // @Produce json
-// @Success 200 {object} gin.H {"message": "Log out successfully"}
+// @Success 200
 // @Router /api/log-out [post]
 func LogOut(c *gin.Context) {
 	c.SetCookie("Authorization", "", 0, "", "", false, true)
@@ -207,9 +207,9 @@ func GetUsers(c *gin.Context) {
 // @Param user body models.UpdateRequest true "Updated user details"
 // @Security Bearer
 // @Success 200 {object} models.UpdateResponse"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 403 {object} "Forbidden: You are not allowed to update this profile"
-// @Failure 500 {object} "Internal Server Error"
+// @Failure 401 {object}
+// @Failure 403 {object}
+// @Failure 500 {object}
 // @Router /api/users/update/{id} [put]
 func UpdateUser(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -284,11 +284,11 @@ func UpdateUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {object} "User successfully deleted"
-// @Failure 400 {object} ErrorResponse
-// @Failure 401 {object} "Unauthorized"
-// @Failure 403 {object} "Forbidden: You are not allowed to delete this profile"
-// @Failure 404 {object} ErrorResponse
+// @Success 200
+// @Failure 400
+// @Failure 401
+// @Failure 403
+// @Failure 404
 // @Router /api/users/delete/{id} [delete]
 func DeleteUser(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)

@@ -30,10 +30,10 @@ type Comment struct {
 //	  Body   string `json:"body" binding:"required,min=1"`
 //	} true "Comment details"
 //
-// @Success 200 {object} gin.H{"comment": Comment} "Newly created comment"
-// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
-// @Failure 422 {object} gin.H{"validations": map[string]interface{}} "Validation error"
-// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Success 200 {object} Comment
+// @Failure 401 {object}
+// @Failure 422 {object}
+// @Failure 500 {object}
 // @Router /api/comments/comment [post]
 func CommentOnPost(c *gin.Context) {
 	var comment struct {
@@ -98,12 +98,12 @@ func CommentOnPost(c *gin.Context) {
 //	  Body string `json:"body" binding:"required,min=1"`
 //	} true "Updated comment details"
 //
-// @Success 200 {object} "Updated comment details"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 403 {object} "Forbidden"
-// @Failure 404 {object} "Comment not found"
-// @Failure 422 {object} "Validation error"
-// @Failure 500 {object} "Internal Server Error"
+// @Success 200
+// @Failure 401
+// @Failure 403
+// @Failure 404
+// @Failure 422
+// @Failure 500
 // @Router /api/comments/update{id} [put]
 func UpdateComment(c *gin.Context) {
 	id := c.Param("id")
@@ -156,10 +156,10 @@ func UpdateComment(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param comment_id path int true "Comment ID"
-// @Success 200 {object} "Comment deleted successfully"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 404 {object} "Comment not found"
-// @Failure 500 {object} "Internal Server Error"
+// @Success 200
+// @Failure 401
+// @Failure 404
+// @Failure 500
 // @Router /api/comments/{id} [delete]
 func DeleteComment(c *gin.Context) {
 	id := c.Param("comment_id")

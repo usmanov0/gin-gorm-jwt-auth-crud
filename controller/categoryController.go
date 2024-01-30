@@ -28,10 +28,9 @@ type Category struct {
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param name body string true "Category name"
 // @Success 200 {object} Category
-// @Failure 400 {object} "Validation errors"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 409 {object} "Conflict - Category already exists"
-// @Failure 500 {object} "Internal Server Error"
+// @Failure 400 {object}
+// @Failure 401 {object}
+// @Failure 500 {object}
 // @Router /api/categories [post]
 func CreateCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
@@ -95,8 +94,8 @@ func CreateCategory(c *gin.Context) {
 // @Param page query int false "Page number"
 // @Param limit query int false "Number of items per page"
 // @Success 200 {object}  pagination.PaginateRes
-// @Failure 401 {object} "Unauthorized"
-// @Failure 500 {object} "Internal Server Error"
+// @Failure 401
+// @Failure 500
 // @Router /api/categories/ [get]
 func GetCategories(c *gin.Context) {
 	var categories []Category
@@ -127,11 +126,10 @@ func GetCategories(c *gin.Context) {
 // @Param id path int true "Category ID"
 // @Param name body string true "Category name"
 // @Success 200 {object} Category "Updated category"
-// @Failure 400 {object} "Validation errors"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 404 {object} "Category not found"
-// @Failure 409 {object} "Conflict - Category name already exists"
-// @Failure 500 {object} "Internal Server Error"
+// @Failure 400
+// @Failure 401
+// @Failure 404
+// @Failure 500
 // @Router /api/categories/{id} [put]
 func UpdateCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)
@@ -204,10 +202,10 @@ func UpdateCategory(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Category ID"
-// @Success 200 {object} "Category deleted successfully"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 404 {object} "Category not found"
-// @Failure 500 {object} "Internal Server Error"
+// @Success 200
+// @Failure 401
+// @Failure 404
+// @Failure 500
 // @Router /api/categories/{id} [delete]
 func DeleteCategory(c *gin.Context) {
 	_, err := helper.GetAuthUser(c)

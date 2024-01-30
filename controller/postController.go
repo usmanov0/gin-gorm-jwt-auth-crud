@@ -5,7 +5,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 	"net/http"
-	"os/user"
 	"simple-crud-api/pkg/errors"
 	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
@@ -21,7 +20,7 @@ type Post struct {
 	UserId     uint      `json:"user_id"`
 	CategoryId uint      `json:"category_id"`
 	Category   Category  `json:"category"`
-	User       user.User `json:"user"`
+	User       User      `json:"user"`
 	Comments   []Comment `json:"comments"`
 }
 
@@ -38,8 +37,8 @@ type Post struct {
 //	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
 //	} true "Post details"
 //
-// @Success 200 {object} "Newly created post"
-// @Failure 401 {object} "Unauthorized"
+// @Success 200
+// @Failure 401
 // @Router /api/posts [post]
 func CreatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -104,8 +103,8 @@ func CreatePost(c *gin.Context) {
 // @Param page query int false "Page number"
 // @Param perPage query int false "Number of items per page"
 // @Success 200 {object} pagination.PaginateRes
-// @Failure 401 {object} "Unauthorized"
-// @Failure 500 {object} "Internal Server Error"
+// @Failure 401
+// @Failure 500
 // @Router /api/posts [get]
 func GetPosts(c *gin.Context) {
 	var posts []Post
@@ -144,8 +143,8 @@ func GetPosts(c *gin.Context) {
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
 // @Success 200 {object} Post
-// @Failure 401 {object} "Unauthorized"
-// @Failure 404 {object} "Post not found"
+// @Failure 401
+// @Failure 404
 // @Router /api/posts/read-post [get]
 func ReadPosts(c *gin.Context) {
 	id := c.Param("id")
@@ -178,9 +177,9 @@ func ReadPosts(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} "Post details"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 404 {object} "Post not found"
+// @Success 200
+// @Failure 401
+// @Failure 404
 // @Router /api/posts/edit/{id} [get]
 func EditPost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -223,8 +222,8 @@ func EditPost(c *gin.Context) {
 //	} true "Updated post details"
 //
 // @Success 200 {object} Post
-// @Failure 401 {object} "Unauthorized"
-// @Failure 403 {object} "Forbidden"
+// @Failure 401
+// @Failure 403
 // @Router /api/posts/update/{id} [put]
 func UpdatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
@@ -294,10 +293,10 @@ func UpdatePost(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} "Post deleted successfully"
-// @Failure 401 {object} "Unauthorized"
-// @Failure 403 {object} "Forbidden"
-// @Failure 404 {object} "Post not found"
+// @Success 200
+// @Failure 401
+// @Failure 403
+// @Failure 404
 // @Router /api/posts/delete/{id} [delete]
 func DeletePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
