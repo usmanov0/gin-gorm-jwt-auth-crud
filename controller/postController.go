@@ -14,6 +14,23 @@ import (
 	"strconv"
 )
 
+// @Summary Create a new post
+// @Description Create a new post
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+//
+//	@Param post body struct {
+//	  Title      string `json:"title" binding:"required,min=2,max=200"`
+//	  Body       string `json:"body" binding:"required"`
+//	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
+//	} true "Post details"
+//
+// @Success 200 {object} gin.H{"message": string} "Newly created post"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 422 {object} gin.H{"validation": map[string]interface{}} "Validation error"
+// @Router /api/posts [post]
 func CreatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
 	if err != nil {
@@ -68,6 +85,18 @@ func CreatePost(c *gin.Context) {
 	})
 }
 
+// @Summary Get a list of posts
+// @Description Get a list of posts
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param page query int false "Page number"
+// @Param perPage query int false "Number of items per page"
+// @Success 200 {object} gin.H{"response": pagination.PaginateRes} "List of posts"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
+// @Router /api/posts [get]
 func GetPosts(c *gin.Context) {
 	var posts []models.Post
 
@@ -97,6 +126,17 @@ func GetPosts(c *gin.Context) {
 	})
 }
 
+// @Summary Read a post by ID
+// @Description Read a post by ID
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Post ID"
+// @Success 200 {object} gin.H{"post": models.Post} "Post details"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Router /api/posts/read-post [get]
 func ReadPosts(c *gin.Context) {
 	id := c.Param("id")
 
@@ -121,6 +161,17 @@ func ReadPosts(c *gin.Context) {
 	})
 }
 
+// @Summary Read a post by ID
+// @Description Read a post by ID
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Post ID"
+// @Success 200 {object} gin.H{"post": "Post details"}
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Router /api/posts/edit/{id} [get]
 func EditPost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
 	if err != nil {
@@ -147,6 +198,25 @@ func EditPost(c *gin.Context) {
 	})
 }
 
+// @Summary Update a post by ID
+// @Description Update a post by ID
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Post ID"
+//
+//	@Param post body struct {
+//	  Title      string `json:"title" binding:"required,min=2,max=200"`
+//	  Body       string `json:"body" binding:"required"`
+//	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
+//	} true "Updated post details"
+//
+// @Success 200 {object} gin.H{"post": models.Post} "Updated post details"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 403 {object} gin.H{"error": string} "Forbidden"
+// @Failure 422 {object} gin.H{"validations": map[string]interface{}} "Validation error"
+// @Router /api/posts/update/{id} [put]
 func UpdatePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
 	if err != nil {
@@ -208,6 +278,18 @@ func UpdatePost(c *gin.Context) {
 	})
 }
 
+// @Summary Delete a post by ID
+// @Description Delete a post by ID
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <JWT_TOKEN>"
+// @Param id path int true "Post ID"
+// @Success 200 {object} gin.H{"message": string} "Post deleted successfully"
+// @Failure 401 {object} gin.H{"error": string} "Unauthorized"
+// @Failure 403 {object} gin.H{"error": string} "Forbidden"
+// @Failure 404 {object} gin.H{"error": string} "Post not found"
+// @Router /api/posts/delete/{id} [delete]
 func DeletePost(c *gin.Context) {
 	authUser, err := helper.GetAuthUser(c)
 	if err != nil {
