@@ -1,0 +1,711 @@
+definitions:
+  controller.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      posts:
+        items:
+          $ref: '#/definitions/controller.Post'
+        type: array
+      slug:
+        type: string
+    type: object
+  controller.Comment:
+    properties:
+      body:
+        type: string
+      id:
+        type: integer
+      post_id:
+        type: integer
+      user:
+        $ref: '#/definitions/controller.User'
+      user_id:
+        type: integer
+    required:
+    - post_id
+    type: object
+  controller.CommentReq:
+    properties:
+      body:
+        minLength: 1
+        type: string
+      postId:
+        minimum: 1
+        type: integer
+    required:
+    - body
+    - postId
+    type: object
+  controller.CommentUpdate:
+    properties:
+      body:
+        minLength: 1
+        type: string
+    required:
+    - body
+    type: object
+  controller.GetUserResponse:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/controller.User'
+        type: array
+    type: object
+  controller.Post:
+    properties:
+      body:
+        type: string
+      category:
+        $ref: '#/definitions/controller.Category'
+      category_id:
+        type: integer
+      comments:
+        items:
+          $ref: '#/definitions/controller.Comment'
+        type: array
+      id:
+        type: integer
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/controller.User'
+      user_id:
+        type: integer
+    type: object
+  controller.PostRequest:
+    properties:
+      body:
+        type: string
+      categoryId:
+        type: integer
+      title:
+        type: string
+    type: object
+  controller.SignInRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  controller.UpdateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  controller.UpdateResponse:
+    properties:
+      user:
+        $ref: '#/definitions/controller.User'
+    type: object
+  controller.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  pagination.PaginateRes:
+    properties:
+      currentPage:
+        type: integer
+      data: {}
+      from:
+        type: integer
+      lastPage:
+        type: integer
+      perPage:
+        type: integer
+      to:
+        type: integer
+      total:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /api/categories:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Category'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new category
+  /api/categories/:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of categories
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.PaginateRes'
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Get a list of categories
+  /api/categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a category
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a category
+    put:
+      consumes:
+      - application/json
+      description: Update a category
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated category
+          schema:
+            $ref: '#/definitions/controller.Category'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Update a category
+  /api/comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a comment by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment ID
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a comment by ID
+  /api/comments/comment:
+    post:
+      consumes:
+      - application/json
+      description: Comment on a post
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment details
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CommentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Comment'
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable Entity
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Comment on a post
+  /api/comments/update{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update a comment by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update commit
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CommentUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Update a comment by ID
+  /api/log-in:
+    post:
+      consumes:
+      - application/json
+      description: Log in an existing user
+      parameters:
+      - description: User credentials for sign in
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controller.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        default:
+          description: ""
+      summary: Sign in a user
+      tags:
+      - Auth
+  /api/log-out:
+    post:
+      description: Log out the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Log out the authenticated user
+      tags:
+      - Auth
+  /api/posts:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of posts
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.PaginateRes'
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Get a list of posts
+    post:
+      consumes:
+      - application/json
+      description: Create a new post
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post details
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/controller.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new post
+  /api/posts/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a post by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a post by ID
+  /api/posts/edit/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Read a post by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - ApiKeyAuth: []
+      summary: Read a post by ID
+  /api/posts/read-post:
+    get:
+      consumes:
+      - application/json
+      description: Read a post by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Post'
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - ApiKeyAuth: []
+      summary: Read a post by ID
+  /api/posts/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update a post by ID
+      parameters:
+      - description: Bearer <JWT_TOKEN>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update post details
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/controller.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Post'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      security:
+      - ApiKeyAuth: []
+      summary: Update a post by ID
+  /api/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User details for sign up
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controller.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        default:
+          description: ""
+      summary: Sign up a new user
+      tags:
+      - Auth
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of users
+      parameters:
+      - description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - description: Number of users per page
+        in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetUserResponse'
+        "401":
+          description: Unauthorized
+        default:
+          description: ""
+      security:
+      - Bearer: []
+      summary: Get a list of users
+      tags:
+      - Users
+  /api/users/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the authenticated user's account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      summary: Delete user
+      tags:
+      - users
+  /api/users/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update the profile of the authenticated user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated user details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.UpdateResponse'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      security:
+      - Bearer: []
+      summary: Update user profile
+      tags:
+      - Users
+swagger: "2.0"
