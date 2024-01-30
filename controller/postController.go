@@ -143,7 +143,7 @@ func GetPosts(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Post ID"
-// @Success 200 {object} models.Post
+// @Success 200 {object} Post
 // @Failure 401 {object} "Unauthorized"
 // @Failure 404 {object} "Post not found"
 // @Router /api/posts/read-post [get]
@@ -222,7 +222,7 @@ func EditPost(c *gin.Context) {
 //	  CategoryId uint   `json:"categoryId" binding:"required,min=1"`
 //	} true "Updated post details"
 //
-// @Success 200 {object} models.Post
+// @Success 200 {object} Post
 // @Failure 401 {object} "Unauthorized"
 // @Failure 403 {object} "Forbidden"
 // @Router /api/posts/update/{id} [put]

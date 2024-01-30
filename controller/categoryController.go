@@ -5,7 +5,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gosimple/slug"
 	"net/http"
-	"simple-crud-api/models"
 	"simple-crud-api/pkg/errors"
 	"simple-crud-api/pkg/helper"
 	"simple-crud-api/pkg/pagination"
@@ -28,7 +27,7 @@ type Category struct {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param name body string true "Category name"
-// @Success 200 {object} models.Category
+// @Success 200 {object} Category
 // @Failure 400 {object} "Validation errors"
 // @Failure 401 {object} "Unauthorized"
 // @Failure 409 {object} "Conflict - Category already exists"
@@ -100,7 +99,7 @@ func CreateCategory(c *gin.Context) {
 // @Failure 500 {object} "Internal Server Error"
 // @Router /api/categories/ [get]
 func GetCategories(c *gin.Context) {
-	var categories []models.Category
+	var categories []Category
 
 	pageStr := c.DefaultQuery("page", "1")
 	page, _ := strconv.Atoi(pageStr)
@@ -127,7 +126,7 @@ func GetCategories(c *gin.Context) {
 // @Param Authorization header string true "Bearer <JWT_TOKEN>"
 // @Param id path int true "Category ID"
 // @Param name body string true "Category name"
-// @Success 200 {object} models.Category "Updated category"
+// @Success 200 {object} Category "Updated category"
 // @Failure 400 {object} "Validation errors"
 // @Failure 401 {object} "Unauthorized"
 // @Failure 404 {object} "Category not found"

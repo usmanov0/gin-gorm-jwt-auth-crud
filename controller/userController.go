@@ -27,7 +27,7 @@ type User struct {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param user body models.User true "User details for sign up"
+// @Param user body User true "User details for sign up"
 // @Success 200
 // @Failure 400
 // @Failure default

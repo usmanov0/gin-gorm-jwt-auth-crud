@@ -30,7 +30,7 @@ type Comment struct {
 //	  Body   string `json:"body" binding:"required,min=1"`
 //	} true "Comment details"
 //
-// @Success 200 {object} gin.H{"comment": models.Comment} "Newly created comment"
+// @Success 200 {object} gin.H{"comment": Comment} "Newly created comment"
 // @Failure 401 {object} gin.H{"error": string} "Unauthorized"
 // @Failure 422 {object} gin.H{"validations": map[string]interface{}} "Validation error"
 // @Failure 500 {object} gin.H{"error": string} "Internal Server Error"
