@@ -17,32 +17,32 @@ func Route(r *gin.Engine) {
 	userRouter := r.Group("/api/users")
 	{
 		userRouter.GET("/", controller.GetUsers)
-		userRouter.PUT("/update", controller.UpdateUser)
-		userRouter.DELETE("/delete", controller.DeleteUser)
+		userRouter.PUT("/update/:id", controller.UpdateUser)
+		userRouter.DELETE("/delete/:id", controller.DeleteUser)
 	}
 
 	categoryRouter := r.Group("/api/categories")
 	{
 		categoryRouter.POST("/create", controller.CreateCategory)
 		categoryRouter.GET("/", controller.GetCategories)
-		categoryRouter.PUT("/update", controller.UpdateCategory)
-		categoryRouter.DELETE("/delete", controller.DeleteCategory)
+		categoryRouter.PUT("/update/:id", controller.UpdateCategory)
+		categoryRouter.DELETE("/delete/:id", controller.DeleteCategory)
 	}
 
 	postRouter := r.Group("/api/posts")
 	{
 		postRouter.POST("/create", controller.CreatePost)
 		postRouter.GET("/", controller.GetPosts)
-		postRouter.GET("/read-post", controller.ReadPosts)
-		postRouter.GET("/edit", controller.EditPost)
-		postRouter.PUT("/update", controller.UpdatePost)
-		postRouter.DELETE("/delete", controller.DeletePost)
+		postRouter.GET("/read-post/:id", controller.ReadPosts)
+		postRouter.GET("/edit/:id", controller.EditPost)
+		postRouter.PUT("/update/:id", controller.UpdatePost)
+		postRouter.DELETE("/delete/:id", controller.DeletePost)
 	}
 
 	commentRouter := r.Group("/api/comments")
 	{
 		commentRouter.POST("/comment", controller.CommentOnPost)
-		commentRouter.PUT("/update", controller.UpdateComment)
-		commentRouter.DELETE("/delete", controller.DeleteComment)
+		commentRouter.PUT("/update/:id", controller.UpdateComment)
+		commentRouter.DELETE("/delete/:id", controller.DeleteComment)
 	}
 }
