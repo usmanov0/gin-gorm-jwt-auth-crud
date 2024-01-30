@@ -42,12 +42,12 @@ func CommentOnPost(c *gin.Context) {
 		return
 	}
 
-	authId := helper.GetAuthUser(c).Id
+	authUser, _ := helper.GetAuthUser(c)
 
 	commentModel := models.Comment{
 		PostId: comment.PostId,
 		Body:   comment.Body,
-		UserId: authId,
+		UserId: authUser.Id,
 	}
 
 	res := initializers.DB.Create(&commentModel)
