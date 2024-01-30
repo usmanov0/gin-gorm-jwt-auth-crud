@@ -2,13 +2,15 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	//swaggerfile "github.com/swaggo/files"
-	//ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerfile "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"simple-crud-api/controller"
 	"simple-crud-api/middleware"
 )
 
 func Route(r *gin.Engine) {
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfile.Handler))
+
 	r.POST("/api/sign-up", controller.SignUp)
 	r.POST("/api/log-in", controller.SignIn)
 
