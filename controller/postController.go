@@ -25,9 +25,9 @@ type Post struct {
 }
 
 var PostReq struct {
-	Title      string `json:"title" binding:"required,min=2,max=200"`
-	Body       string `json:"body" binding:"required"`
-	CategoryId uint   `json:"categoryId" binding:"required,min=1"`
+	Title      string `json:"title"`
+	Body       string `json:"body"`
+	CategoryId uint   `json:"categoryId"`
 }
 
 // @Summary Create a new post
