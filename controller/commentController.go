@@ -1,14 +1,14 @@
-package handler
+package controller
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
-	"simple-crud-api/internal/common/db/initializers"
-	"simple-crud-api/internal/errors"
-	"simple-crud-api/internal/helper"
-	"simple-crud-api/internal/models"
-	"simple-crud-api/internal/util"
+	"simple-crud-api/models"
+	"simple-crud-api/pkg/errors"
+	"simple-crud-api/pkg/helper"
+	"simple-crud-api/pkg/util"
+	"simple-crud-api/storage/initializers"
 )
 
 func CommentOnPost(c *gin.Context) {

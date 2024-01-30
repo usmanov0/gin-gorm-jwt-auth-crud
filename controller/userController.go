@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,11 +7,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
-	"simple-crud-api/internal/common/db/initializers"
-	"simple-crud-api/internal/errors"
-	"simple-crud-api/internal/models"
-	"simple-crud-api/internal/pagination"
-	"simple-crud-api/internal/util"
+	"simple-crud-api/models"
+	"simple-crud-api/pkg/errors"
+	"simple-crud-api/pkg/pagination"
+	"simple-crud-api/pkg/util"
+	"simple-crud-api/storage/initializers"
 	"strconv"
 	"time"
 )
